@@ -172,13 +172,13 @@ for (var i=0;i<x.length;i++) {
 		
 		var h1 = document.createElement("h1");
     var logo = document.createElement("img");
-		logo.setAttribute("src","http://cor-liv-cdn-static.bibliocommons.com/images/CO-JEFFERSON/logo.png");
+		logo.setAttribute("src","/logo.png");
 		logo.setAttribute("class","logo");
 		h1.appendChild(logo);
 		var span = document.createElement("span");
 		span.setAttribute("class","h1text");
 		var prettybranch = localbranch;
-		span.appendChild(document.createTextNode("Upcoming Events @ " + prettybranch));
+		span.appendChild(document.createTextNode("Upcoming Events at " + prettybranch));
 		h1.appendChild(span);
 		div.appendChild(h1);			
 		
