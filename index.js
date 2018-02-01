@@ -10,14 +10,15 @@ var locations = ['Arvada Library',
 var slidesSeen = 0;
 var currentSlide = 0;
 var localbranch = "Lakewood Library";
+var language = '';
 var xmlDoc;
 var slidesBeforeRefresh = 30;
 var dateLoaded = new Date().getDate();
-var timeOnSlide = 60; // in seconds
+//var timeOnSlide = 60; // in seconds
+var timeOnSlide = 6; // in seconds
 
 // get local branch from key value pair in url
 var noShowList = ["Baby Time", "Family Time", "Toddler Time"];
-var languages = ["English", "Spanish"];
 
 var queryString = "";
 
@@ -74,8 +75,9 @@ function refreshSlides(collapseseries) {
   if (xmlDoc) {
     var x=xmlDoc.getElementsByTagName("item");
     for (var i=0;i<x.length;i++) {
-      // get event's branch
+      var langs = [];
 
+      // get event's branch
       if (x[i].getElementsByTagNameNS("http://bibliocommons.com/rss/1.0/modules/event/","name")[0]
           && x[i].getElementsByTagNameNS("http://bibliocommons.com/rss/1.0/modules/event/","name")[0].childNodes[0]) {
         var branch = x[i].getElementsByTagNameNS("http://bibliocommons.com/rss/1.0/modules/event/","name")[0].childNodes[0].nodeValue;
@@ -83,6 +85,16 @@ function refreshSlides(collapseseries) {
       else{
         branch = "";
       }
+
+      // <category domain="Language">English</category>
+      var cat = x[1].getElementsByTagName("category");
+      for (n=0;n<cat.length;n++) {
+        if (cat[n].getAttribute("domain") == "Language") {
+          langs.push(cat[n].innerHTML);
+        }
+      }
+
+      console.log(langs);
 
       if (branch == localbranch) {
         // Event ends less than an hour from now? If so, don't add slide.
@@ -110,6 +122,7 @@ function refreshSlides(collapseseries) {
             && x[i].getElementsByTagNameNS("http://bibliocommons.com/rss/1.0/modules/event/","is_full")[0].childNodes[0].nodeValue == "true") {
           continue;
         }
+        //if (langs.indexOf(language) == -1 ) { continue; }
 
         // if event is in the noShow List
         if (x[i].getElementsByTagName("title")[0] &&
@@ -311,7 +324,6 @@ function refreshSlides(collapseseries) {
   document.getElementsByTagName("body")[0].replaceChild(newParent,oldParent);
 
   // check number of slides; if one slide, try expanding series (unless we've already tried this); if no slides, add welcome slide
-
   if (!document.getElementById("events").childNodes[0]) {
     var div = document.createElement("div");
     div.setAttribute("class","slide");
