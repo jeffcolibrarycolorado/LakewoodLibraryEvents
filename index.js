@@ -14,7 +14,7 @@ var language = '';
 var xmlDoc;
 var slidesBeforeRefresh = 30;
 var dateLoaded = new Date().getDate();
-var timeOnSlide = 60; // in seconds
+var timeOnSlide = 30; // in seconds
 //var timeOnSlide = 6; // in seconds
 
 // get local branch from key value pair in url
