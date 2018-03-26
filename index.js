@@ -94,7 +94,7 @@ function refreshSlides(collapseseries) {
         }
       }
 
-      console.log(langs);
+      //console.log(langs);
 
       if (branch == localbranch) {
         // Event ends less than an hour from now? If so, don't add slide.
@@ -166,6 +166,7 @@ function refreshSlides(collapseseries) {
         newParent.appendChild(div);
 
         // add Upcoming Events header
+        /**
         var h1 = document.createElement("h1");
         var logo = document.createElement("img");
         logo.setAttribute("src","logo.png");
@@ -177,13 +178,14 @@ function refreshSlides(collapseseries) {
         span.appendChild(document.createTextNode("Upcoming Events at " + prettybranch));
         h1.appendChild(span);
         div.appendChild(h1);
+        **/
 
         var innerDiv = document.createElement("div");
         innerDiv.setAttribute("class","event");
         div.appendChild(innerDiv);
 
         // if event is happening today, add banner
-
+        /**
         if (x[i].getElementsByTagNameNS("http://bibliocommons.com/rss/1.0/modules/event/","start_date")[0]
             && x[i].getElementsByTagNameNS("http://bibliocommons.com/rss/1.0/modules/event/","start_date")[0].childNodes[0]) {
           var eventdateforbanner = new Date(x[i].getElementsByTagNameNS("http://bibliocommons.com/rss/1.0/modules/event/","start_date")[0].childNodes[0].nodeValue);
@@ -196,6 +198,7 @@ function refreshSlides(collapseseries) {
             innerDiv.appendChild(today);
           }
         }
+        **/
 
         title = x[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
         var h2 = document.createElement("h2");
@@ -213,7 +216,7 @@ function refreshSlides(collapseseries) {
 
           endhour = eventenddate.getHours();
           endminutes = eventenddate.getMinutes();
-          endampm = " a.m.";
+          endampm = " AM";
           var endseparator = ":";
           if (endhour == 12 && endminutes == 0) {
             endhour = "noon";
@@ -229,17 +232,22 @@ function refreshSlides(collapseseries) {
           }
           else {
             if (endhour == 12 && endminutes > 0) {
-              endampm = " p.m.";
+              endampm = " PM";
             }
             if (endhour > 12) {
               endhour = endhour - 12;
-              endampm = " p.m.";
+              endampm = " PM";
             }
             if (endminutes < 10) {
               endminutes = "0" + endminutes;
             }
           }
-          endtime = endhour + endseparator + endminutes + endampm;
+          //endtime = endhour + endseparator + endminutes + endampm;
+          endtime = endhour;
+          if (endminutes > 0) {
+            endtime += endseparator + endminutes;
+          }
+          endtime += endampm;
 
         } // if enddate
 
@@ -253,13 +261,13 @@ function refreshSlides(collapseseries) {
           var month = monthsOfYear[eventdate.getMonth()];
           var date = eventdate.getDate();
           var dateDiv = document.createElement("div");
-          dateDiv.setAttribute("class","date");
-          dateDiv.appendChild(document.createTextNode(day + ", " + month + " " + date));
-          innerDiv.appendChild(dateDiv);
+          if (minutes > 0) {
+            startTime += separator + minutes;
+          }
 
           var hour = eventdate.getHours();
           var minutes = eventdate.getMinutes();
-          var ampm = " a.m.";
+          var ampm = " AM";
           var separator = ":";
           if (hour == 12 && minutes == 0) {
             hour = "Noon";
@@ -275,11 +283,11 @@ function refreshSlides(collapseseries) {
           }
           else {
             if (hour == 12 && minutes > 0) {
-              ampm = " p.m.";
+              ampm = " PM";
             }
             if (hour > 12) {
               hour = hour - 12;
-              ampm = " p.m.";
+              ampm = " PM";
             }
             if (minutes < 10) {
               minutes = "0" + minutes;
@@ -289,19 +297,26 @@ function refreshSlides(collapseseries) {
             endtime = "";
             endampm = "";
           }
-          if (ampm == endampm) {
-            ampm = "";
-          }
+//          if (ampm == endampm) {
+//            ampm = "";
+//          }
           if (endtime.length > 0) {
-            endtime = " to " + endtime;
+            //endtime = " - " + endtime;
           }
+          /**
           var timeDiv = document.createElement("div");
-          timeDiv.setAttribute("class","time");
+          timeDiv.setAttribute("class","date time");
           timeDiv.appendChild(document.createTextNode(hour + separator + minutes + ampm + endtime));
           innerDiv.appendChild(timeDiv);
+          **/
+          var startTime = hour;
+          dateDiv.setAttribute("class","date time");
+          dateDiv.appendChild(document.createTextNode(day + ", " + month + " " + date + ", " + startTime + ampm + " - " + endtime));
+          innerDiv.appendChild(dateDiv);
 
         } // if startdate
 
+      /**
         if (x[i].getElementsByTagName("description")[0] && x[i].getElementsByTagName("description")[0].childNodes[0]) {
           var description = x[i].getElementsByTagName("description")[0].childNodes[0].data;
           description = description.replace(/Display: Block/igm, "display: none");
@@ -313,6 +328,8 @@ function refreshSlides(collapseseries) {
           descriptionDiv.appendChild(fade);
           innerDiv.appendChild(descriptionDiv);
         } // if description
+      **/
+
       } // if branch = localBranch
     } // for loop to cycle through events in feed
   }
